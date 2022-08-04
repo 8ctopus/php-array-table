@@ -2,3 +2,4 @@ phpunit.phar
 /vendor/
 /composer.lock
 /.phpunit.result.cache
+/*.sublime-workspace
