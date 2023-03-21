@@ -1,14 +1,21 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use dekor\ArrayToTextTable;
+use dekor\ArrayToTextTableException;
+use PHPUnit\Framework\TestCase;
 
-include __DIR__ . '/../src/ArrayToTextTable.php';
-
+/**
+ * @internal
+ *
+ * @covers dekor\ArrayToTextTable
+ */
 class SimpleTest extends TestCase
 {
     /**
      * @dataProvider getCases
+     *
+     * @param mixed $data
+     * @param mixed $expectResult
      */
     public function testCorrectBuilding($data, $expectResult)
     {
@@ -17,17 +24,7 @@ class SimpleTest extends TestCase
         $this->assertEquals($expectResult, $builder->render());
     }
 
-    /**
-     * @dataProvider getFormattingCases
-     */
-    public function testFormatting($data, $format, $expectResult)
-    {
-        $builder = new ArrayToTextTable($data, $format);
-
-        $this->assertEquals($expectResult, $builder->render());
-    }
-
-    public function getCases()
+    public static function getCases()
     {
         return [
             [
@@ -46,7 +43,7 @@ class SimpleTest extends TestCase
                         'id' => 3,
                         'name' => 'Andrew Sikorsky',
                         'role' => 'php developer',
-                    ]
+                    ],
                 ],
                 'expected' =>
                     '+----+-----------------+----------------+' . PHP_EOL .
@@ -108,66 +105,16 @@ class SimpleTest extends TestCase
                     '| 2  | Артем Малеев  | Тест кириллических символов 2 |' . PHP_EOL .
                     '+----+---------------+-------------------------------+',
             ],
-            [
-                'data' => [
-                    [
-                        'sum' => 10.999,
-                    ],
-                    [
-                        'sum' => 22,
-                    ],
-                    [
-                        'sum' => 7,
-                    ],
-                    [
-                        'sum' => 0,
-                    ],
-                ],
-                'expected' =>
-                    '+--------+' . PHP_EOL .
-                    '| sum    |' . PHP_EOL .
-                    '+--------+' . PHP_EOL .
-                    '| 10.999 |' . PHP_EOL .
-                    '| 22     |' . PHP_EOL .
-                    '| 7      |' . PHP_EOL .
-                    '| 0      |' . PHP_EOL .
-                    '+--------+',
-            ],
         ];
     }
 
-    public function getFormattingCases()
+    public function testInCorrectDataBuilding()
     {
-        return [
-            [
-                'data' => [
-                    [
-                        'sum' => 10.999,
-                    ],
-                    [
-                        'sum' => 222,
-                    ],
-                    [
-                        'sum' => 7,
-                    ],
-                    [
-                        'sum' => 0,
-                    ],
-                ],
-                'format' => [
-                    'padding' => 'left',
-                    'number' => '%.2f',
-                ],
-                'expected' =>
-                    '+--------+' . PHP_EOL .
-                    '|    sum |' . PHP_EOL .
-                    '+--------+' . PHP_EOL .
-                    '|  11.00 |' . PHP_EOL .
-                    '| 222.00 |' . PHP_EOL .
-                    '|   7.00 |' . PHP_EOL .
-                    '|   0.00 |' . PHP_EOL .
-                    '+--------+',
-            ],
-        ];
+        $data = [['test' => []]];
+
+        $builder = new ArrayToTextTable($data);
+
+        $this->expectException(ArrayToTextTableException::class);
+        $builder->render();
     }
 }

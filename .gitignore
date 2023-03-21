@@ -1,5 +1,7 @@
 phpunit.phar
-/vendor/
-/composer.lock
-/.phpunit.result.cache
-/*.sublime-workspace
+phpunit
+.phpunit.result.cache
+coverage/
+.idea
+vendor
+.php-cs-fixer.cache

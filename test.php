@@ -1,29 +1,19 @@
 <?php
+/**
+ * THIS FILE IS FOR DEV TESTS ONLY
+ */
 
 use dekor\ArrayToTextTable;
+use dekor\formatters\ColorFormatter;
 
 require __DIR__ . '/vendor/autoload.php';
 
 $data = [
-    [
-        'sum' => 10.999,
-    ],
-    [
-        'sum' => 222,
-    ],
-    [
-        'sum' => 7,
-    ],
-    [
-        'sum' => 0,
-    ],
+    ['test' => 1],
+    ['test' => -1],
 ];
 
-$format = [
-    'padding' => 'left',
-    'number' => '%.2f',
-];
+$builder = new ArrayToTextTable($data);
+$builder->applyFormatter(new ColorFormatter(['test' => fn ($value) => $value > 0 ? 'Red' : 'Green']));
 
-echo (new ArrayToTextTable($data))->render() . PHP_EOL;
-
-echo (new ArrayToTextTable($data, $format))->render() . PHP_EOL;
+echo $builder->render() . PHP_EOL;
