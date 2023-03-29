@@ -5,3 +5,4 @@ coverage/
 .idea
 vendor
 .php-cs-fixer.cache
+*.sublime-workspace
